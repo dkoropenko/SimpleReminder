@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Reminder</string>
+
+    <!--Left Menu-->
+    <string name="create_label">Create new label</string>
+    <string name="help">Help</string>
+    <string name="options">Options</string>
+
+    <!--Menu-->
+    <string name="change_label">Change label</string>
+    <string name="create_new_task">Create new Task</string>
+
+    <!--Task List-->
+    <string-array name="elements">
+        <item>test 1</item>
+        <item>test 2</item>
+        <item>test 3</item>
+        <item>test 4</item>
+        <item>test 5</item>
+        <item>test 6</item>
+        <item>test 7</item>
+        <item>test 8</item>
+        <item>test 9</item>
+        <item>test 10</item>
+        <item>test 11</item>
+        <item>test 12</item>
+    </string-array>
+</resources>
