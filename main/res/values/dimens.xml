@@ -10,4 +10,7 @@
     <!--Task List-->
         <dimen name="task_list_margin_left_right">5dp</dimen>
 
+    <!--Labels-->
+        <dimen name="label_info_size_text1">20dp</dimen>
+        <dimen name="label_info_size_text2">15dp</dimen>
 </resources>

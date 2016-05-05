@@ -31,36 +31,70 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
                 "label TEXT);");
 
         //Заполняем таблицу тестовыми данными.
-        db.insert("labels", null, addDatas("Main", "Main Label", 3));
-        db.insert("labels", null, addDatas("One", "One Label", 2));
-        db.insert("labels", null, addDatas("Two", "Two Label", 0));
-        db.insert("labels", null, addDatas("Three", "Three Label", 10));
-        db.insert("labels", null, addDatas("Four", "Four Label", 25));
-        db.insert("labels", null, addDatas("Five", "Five Label", 0));
-        db.insert("labels", null, addDatas("Six", "Six Label", 9));
-        db.insert("labels", null, addDatas("Seven", "Seven Label", 6));
-        db.insert("labels", null, addDatas("Eight", "Eight Label", 7));
-        db.insert("labels", null, addDatas("Ten", "Ten Label", 0));
+        addLabel(db, "Main", "Main label");
     }
-
-    private ContentValues addDatas(String name, String desc, int count){
-        ContentValues values = new ContentValues();
-        values.put("label_name", name);
-        values.put("label_desc", desc);
-        values.put("count", count);
-
-        return values;
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Пока нечего обновлять
     }
 
+    public void addLabel(SQLiteDatabase db, String labelName, String labelDesc){
+        ContentValues values = new ContentValues();
+        values.put("label_name", labelName);
+        values.put("label_desc", labelDesc);
+        values.put("count", 0);
+
+        db.insert("labels", null, values);
+    }
+    public void deleteLabel(SQLiteDatabase db, String labelName){
+        db.delete("label", "label_name = ?", new String[]{labelName});
+    }
+    public void changeLabel (SQLiteDatabase db, String labelName, String labelDesc, String oldLabelName){
+        ContentValues values = new ContentValues();
+        values.put("label_name", labelName);
+
+        if (labelDesc != null)
+            values.put("label_desc", labelDesc);
+
+        db.update("labels", values,"label_name = ?", new String[]{oldLabelName});
+    }
+    public void changeLabelCount(SQLiteDatabase db, String labelName, boolean action){
+        Cursor cursor = db.query("labels", new String[]{"count"},
+                "label_name = ?",
+                new String[]{labelName},null,null,null);
+
+        int count = 0;
+        if(cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+
+        ContentValues values = new ContentValues();
+
+        if (action){
+            count++;
+            values.put("count", count);
+        } else{
+            count--;
+            values.put("count", count);
+        }
+
+        db.update("labels", values,"label_name = ?", new String[]{labelName});
+    }
+    public boolean checkLabelName(SQLiteDatabase db, String labelName){
+        boolean result = false;
+
+        Cursor cursor = db.query("labels", new String[]{"label_name"}, "label_name = ?", new String[]{labelName}, null,null,null);
+        result = cursor.moveToFirst();
+
+        cursor.close();
+
+        return result;
+    }
+
     public void closeConnection(Cursor cursor, SQLiteDatabase database){
-        if(!cursor.isClosed())
+        if(cursor != null &&!cursor.isClosed())
             cursor.close();
-        if(database.isOpen())
+        if(database != null && database.isOpen())
             database.close();
     }
 }

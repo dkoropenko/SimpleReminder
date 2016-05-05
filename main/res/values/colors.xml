@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#d1e0ef</color>
     <color name="colorPrimaryDark">#d1e0ef</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#d1e0ef</color>
 
     <color name="main_color">#d6e6ed</color>
 
@@ -21,4 +21,7 @@
     <color name="casual_list_background">#dcefd1</color>
     <color name="complete_list_background">#dedede</color>
 
+    <!--Labels-->
+    <color name="label_info_text1">#5c7792</color>
+    <color name="label_info_text2">#9c0101</color>
 </resources>

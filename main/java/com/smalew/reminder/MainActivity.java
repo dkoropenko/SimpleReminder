@@ -1,11 +1,13 @@
 package com.smalew.reminder;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,12 +22,17 @@ import com.smalew.reminder.database.ReminderDBHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private ListView leftMenu;
 
     private ReminderDBHelper reminderDBHelper;
     private Cursor cursor;
+
+    private Fragment tasks;
+    private String labelName;
+
+    private Fragment addLabelFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +44,8 @@ public class MainActivity extends AppCompatActivity {
         leftMenu.setAdapter(getAdapter());
         leftMenu.setOnItemClickListener(new DrawerOnClickItemListener());
 
-        TaskListsFragment taskListsFragment = new TaskListsFragment();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_container, taskListsFragment);
-
-        ft.addToBackStack(null);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_task_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        labelName = "Main";
+        createTaskFragment();
     }
 
     /**
@@ -68,33 +64,22 @@ public class MainActivity extends AppCompatActivity {
         if (cursor.moveToFirst()){
             items = new HashMap<>();
             items.put("icon", R.drawable.ic_label_black_24dp);
-            items.put("text1", cursor.getString(0));
-
-            if (cursor.getInt(1) != 0)
-                items.put("text2", cursor.getInt(1));
-            else
-                items.put("text2", "");
-
+            items.put("mainText", cursor.getString(0));
+            items.put("count", cursor.getInt(1));
             list.add(items);
 
             while (cursor.moveToNext()) {
                 items = new HashMap<>();
                 items.put("icon", R.drawable.ic_label_black_24dp);
-                items.put("text1", cursor.getString(0));
-
-                if (cursor.getInt(1) != 0)
-                    items.put("text2", cursor.getInt(1));
-                else
-                    items.put("text2", "");
-
+                items.put("mainText", cursor.getString(0));
+                items.put("count", cursor.getInt(1));
                 list.add(items);
             }
         }
 
-
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,list,R.layout.left_menu_list_item,
-                new String[]{"icon", "text1", "text2"},
-                new int[]{R.id.list_item_icon, R.id.list_item_text1, R.id.list_item_text2});
+                new String[]{"icon", "mainText", "count"},
+                new int[]{R.id.list_item_icon, R.id.list_item_main_text, R.id.list_item_count});
 
         reminderDBHelper.closeConnection(cursor, database);
 
@@ -124,6 +109,52 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            if (position == 0){
+                TextView name = (TextView) view.findViewById(R.id.list_hf_item_text);
+                labelName = name.getText().toString();
+
+                addLabelFragment = new AddLabelFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.frame_container, addLabelFragment);
+                ft.addToBackStack(null);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }
+
+            DrawerLayout leftMenu = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ListView leftMenuList = (ListView) findViewById(R.id.left_menu);
+            leftMenu.closeDrawer(leftMenuList);
         }
+    }
+
+    //Добавление ярлыка. Берутся значения, введенные пользователем, проверяются и заносятся в БД.
+    public void addLabel(View view){
+        TextView mainLabelText = (TextView) findViewById(R.id.add_label_name);
+        TextView mainLabelDesc = (TextView) findViewById(R.id.add_label_desc);
+
+        String nameText = mainLabelText.getText().toString();
+        String nameDesc = mainLabelDesc.getText().toString();
+
+        ReminderDBHelper reminderDBHelper = new ReminderDBHelper(this);
+        SQLiteDatabase db = reminderDBHelper.getWritableDatabase();
+
+        if (!nameText.equals("") && !reminderDBHelper.checkLabelName(db, nameText)){
+            reminderDBHelper.addLabel(db, nameText, nameDesc);
+            reminderDBHelper.closeConnection(null, db);
+
+            this.recreate();
+            createTaskFragment();
+        }else{
+            mainLabelText.setBackgroundColor(getResources().getColor(R.color.important_list_background));
+        }
+    }
+
+    private void createTaskFragment(){
+        tasks = new TaskListsFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.frame_container, tasks);
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
 }
