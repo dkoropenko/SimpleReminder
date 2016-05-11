@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all_tasks"
+            android:icon="@mipmap/ic_receipt_black_24dp"
+            android:title="@string/nav_all_tasks" />
+        <item
+            android:id="@+id/nav_important"
+            android:icon="@mipmap/ic_info_outline_black_24dp"
+            android:title="@string/nav_important" />
+        <item
+            android:id="@+id/nav_complete_tasks"
+            android:icon="@mipmap/ic_done_all_black_24dp"
+            android:title="@string/nav_complete_task" />
+        <item
+            android:id="@+id/nav_parent_labels"
+            android:icon="@mipmap/ic_label_black_24dp"
+            android:title="@string/nav_task_parent_labels" />
+    </group>
+
+    <item android:title="@string/nav_title">
+        <menu>
+            <item
+                android:id="@+id/nav_options"
+                android:icon="@mipmap/ic_settings_black_24dp"
+                android:title="@string/nav_options" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@mipmap/ic_help_black_24dp"
+                android:title="@string/nav_help" />
+        </menu>
+    </item>
+
+</menu>

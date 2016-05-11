@@ -1,25 +1,23 @@
 <resources>
     <string name="app_name">Simple Reminder</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
     <!--Left Menu-->
-    <string name="create_label">Create new label</string>
-    <string name="help">Help</string>
-    <string name="options">Options</string>
+    <string name="nav_title">Preference</string>
+    <string name="nav_all_tasks">All tasks</string>
+    <string name="nav_important">Important tasks</string>
+    <string name="nav_complete_task">Completed tasks</string>
+    <string name="nav_task_parent_labels">Labels</string>
 
-    <!--Labels-->
-    <string name="add_label_name_info1">Please input label name</string>
-    <string name="add_label_name_info2">Important! Name must be unique. </string>
+    <string name="nav_options">Options</string>
+    <string name="nav_help">Help</string>
 
-    <string name="add_label_desc_info1">Please input label description</string>
-    <string name="add_label_desc_info2">Not important. </string>
-
-    <!--Menu-->
-    <string name="change_label">Change label</string>
-    <string name="create_new_task">Create new Task</string>
-    <string name="delete_task">Delete Task</string>
-
-    <!--Task List-->
-    <string-array name="elements">
+    <!--test-->
+    <string-array name="test_list">
         <item>test 1</item>
         <item>test 2</item>
         <item>test 3</item>
@@ -30,8 +28,5 @@
         <item>test 8</item>
         <item>test 9</item>
         <item>test 10</item>
-        <item>test 11</item>
-        <item>test 12</item>
     </string-array>
-
 </resources>

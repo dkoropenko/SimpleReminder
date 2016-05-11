@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#d1e0ef</color>
-    <color name="colorPrimaryDark">#d1e0ef</color>
-    <color name="colorAccent">#d1e0ef</color>
-
-    <color name="main_color">#d6e6ed</color>
-
-    <!--Left Menu-->
-    <color name="left_menu_background">#d1e0ef</color>
-    <color name="left_menu_text">#5b7691</color>
-    <color name="left_menu_count_text">#223241</color>
-    <color name="left_menu_count_background">#91b7de</color>
-
-    <!--Task List-->
-    <color name="tabs_background">#d1e0ef</color>
-    <color name="tabs_text_color">#5b7691</color>
-
-    <color name="task_list_text">#5b7691</color>
-    <color name="important_list_background">#efd1d3</color>
-    <color name="casual_list_background">#dcefd1</color>
-    <color name="complete_list_background">#dedede</color>
-
-    <!--Labels-->
-    <color name="label_info_text1">#5c7792</color>
-    <color name="label_info_text2">#9c0101</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>
