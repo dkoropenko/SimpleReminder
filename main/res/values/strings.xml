@@ -16,17 +16,16 @@
     <string name="nav_options">Options</string>
     <string name="nav_help">Help</string>
 
-    <!--test-->
-    <string-array name="test_list">
-        <item>test 1</item>
-        <item>test 2</item>
-        <item>test 3</item>
-        <item>test 4</item>
-        <item>test 5</item>
-        <item>test 6</item>
-        <item>test 7</item>
-        <item>test 8</item>
-        <item>test 9</item>
-        <item>test 10</item>
-    </string-array>
+    <!--TestTaskFragment-->
+    <string name="information">Please create new task. Important!\n
+                                Task name must be unique.</string>
+    <string name="task_name_info">Input name</string>
+    <string name="desc_name_info">Input description</string>
+    <string name="task_import">Importance</string>
+    <string name="task_date">Input date when task\n must be complete</string>
+    <string name="task_parent_label">Choose label</string>
+
+    <string name="task_choose_import">importance</string>
+    <string name="task_choose_usual">usual</string>
+
 </resources>

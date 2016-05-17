@@ -1,0 +1,106 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.CreateTaskFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/task_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_marginRight="@dimen/right_margin"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/main_info_text_size"
+            android:text="@string/information" />
+
+        <TextView
+            android:id="@+id/name_text_task_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/task_info"
+            android:layout_alignBaseline="@+id/name_text_task"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:textSize="@dimen/task_info_text_size"
+            android:text="@string/task_name_info" />
+
+        <EditText
+            android:id="@+id/name_text_task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/right_margin"
+            android:layout_toRightOf="@id/name_text_task_info"
+            android:layout_below="@+id/task_info"/>
+
+        <TextView
+            android:id="@+id/desc_text_task_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/name_text_task_info"
+            android:layout_alignBaseline="@+id/desc_text_task"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:textSize="@dimen/task_info_text_size"
+            android:text="@string/desc_name_info" />
+
+        <EditText
+            android:id="@+id/desc_text_task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/right_margin"
+            android:layout_toRightOf="@id/desc_text_task_info"
+            android:layout_below="@+id/name_text_task"/>
+
+        <TextView
+            android:id="@+id/task_importante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_below="@id/desc_text_task_info"
+            android:layout_alignBottom="@+id/import_choose"
+            android:gravity="center"
+            android:textSize="@dimen/task_info_text_size"
+            android:text="@string/task_import"/>
+
+        <Spinner
+            android:id="@+id/import_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/right_margin"
+            android:layout_toRightOf="@id/task_importante"
+            android:layout_below="@id/desc_text_task"/>
+
+        <TextView
+            android:id="@+id/task_parent_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin"
+            android:layout_below="@id/task_importante"
+            android:layout_alignBottom="@+id/parent_label_choose"
+            android:gravity="center"
+            android:textSize="@dimen/task_info_text_size"
+            android:text="@string/task_parent_label"/>
+
+        <Spinner
+            android:id="@+id/parent_label_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/right_margin"
+            android:layout_toRightOf="@id/task_parent_label"
+            android:layout_below="@id/import_choose"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

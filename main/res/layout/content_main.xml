@@ -12,12 +12,11 @@
     tools:context="ru.smalew.simplereminder.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <FrameLayout
+        android:id="@+id/frame_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+    </FrameLayout>
 
-    <!--Здесь добавляем список-->
-    <!--Далее из выбора элемента меню забираем значение и херачим сюда из базы данных-->
-    <!--tasks. Добавить множественный выбор, что позволит убить сразу несколько задач.-->
 </RelativeLayout>
