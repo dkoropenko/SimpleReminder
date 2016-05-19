@@ -4,6 +4,46 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/toolbar_action_settings"
+        android:visible="false"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/complete_task_toolbar_btn"
+        android:title="Complete task"
+        android:orderInCategory="1"
+        android:icon="@mipmap/ic_done_white_24dp"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/create_task_toolbar_btn"
+        android:title="Create task"
+        android:orderInCategory="2"
+        android:icon="@mipmap/ic_playlist_add_white_24dp"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/delete_task_toolbar_btn"
+        android:title="Delete task"
+        android:orderInCategory="3"
+        android:icon="@mipmap/ic_delete_white_24dp"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/create_label_toolbar_btn"
+        android:title="Create label"
+        android:orderInCategory="4"
+        android:icon="@mipmap/ic_library_add_white_24dp"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/delete_label_toolbar_btn"
+        android:title="Delete label"
+        android:orderInCategory="5"
+        android:icon="@mipmap/ic_delete_white_24dp"
+        android:visible="false"
+        app:showAsAction="always"/>
 </menu>

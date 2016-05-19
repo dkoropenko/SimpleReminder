@@ -3,8 +3,8 @@ package ru.smalew.simplereminder;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,17 +15,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
-import layout.CreateTaskFragment;
 import ru.smalew.simplereminder.database.ReminderDBHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
-    FloatingActionButton createElement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +34,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        createElement = (FloatingActionButton) findViewById(R.id.fab);
-        createElement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,19 +45,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null){
-            Fragment mainFragment = null;
             ReminderDBHelper reminderDBHelper = new ReminderDBHelper(this);
             List elements = reminderDBHelper.getTasksElements(null, null);
             reminderDBHelper.closeConnection();
 
-            if (elements.size() == 0){
-                mainFragment = new CreateTaskFragment();
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frame_content, mainFragment);
-            ft.addToBackStack(null);
-            ft.commit();
+            if (elements.isEmpty()) createNewFragment(R.id.create_task_toolbar_btn);
+            else createNewFragment(R.id.nav_all_tasks);
         }
 
     }
@@ -98,6 +83,14 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.complete_task_toolbar_btn){}
+        if (id == R.id.create_task_toolbar_btn){
+            createNewFragment(R.id.create_task_toolbar_btn);
+        }
+        if (id == R.id.delete_task_toolbar_btn){}
+        if (id == R.id.create_label_toolbar_btn){}
+        if (id == R.id.delete_label_toolbar_btn){}
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -107,40 +100,85 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Fragment fragment = null;
-        Bundle arguments = new Bundle();
-
-        if (id == R.id.nav_all_tasks) {
-            toolbar.setTitle(R.string.nav_all_tasks);
-            fragment = new TaskElementsList();
-            arguments.putString(TaskElementsList.STATUS_SELECTIONS, "");
-            arguments.putString(TaskElementsList.STATUS_STATE, "");
-        }
-        if (id == R.id.nav_important){
-            toolbar.setTitle(R.string.nav_important);
-            fragment = new TaskElementsList();
-            arguments.putString(TaskElementsList.STATUS_SELECTIONS, "status = ?");
-            arguments.putString(TaskElementsList.STATUS_STATE, "1");
-        }
-        if (id == R.id.nav_complete_tasks){
-            toolbar.setTitle(R.string.nav_complete_task);
-            fragment = new TaskElementsList();
-            arguments.putString(TaskElementsList.STATUS_SELECTIONS, "status = ?");
-            arguments.putString(TaskElementsList.STATUS_STATE, "2");
-        }
-        if (id == R.id.nav_parent_labels){
-            toolbar.setTitle(R.string.nav_task_parent_labels);
-            fragment = new LabelElementsList();
-        }
-
-        fragment.setArguments(arguments);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_content, fragment);
-        ft.addToBackStack(null);
-        ft.commit();
+        createNewFragment(id);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void createNewFragment(int id){
+        Bundle arguments = new Bundle();
+        //Для создания фрагментов и работы с ними
+        Fragment fragment = null;
+        if (id == R.id.nav_all_tasks) {
+            toolbar.setTitle(getResources().getString(R.string.toolbar_all_tasks));
+            fragment = new TaskElementsList();
+            arguments.putString(TaskElementsList.STATUS_SELECTIONS, "");
+            arguments.putString(TaskElementsList.STATUS_STATE, "");
+            fragment.setArguments(arguments);
+        }
+        if (id == R.id.nav_important){
+            toolbar.setTitle(getResources().getString(R.string.toolbar_important_tasks));
+            fragment = new TaskElementsList();
+            arguments.putString(TaskElementsList.STATUS_SELECTIONS, "status = ?");
+            arguments.putString(TaskElementsList.STATUS_STATE, "1");
+            fragment.setArguments(arguments);
+        }
+        if (id == R.id.nav_complete_tasks){
+            toolbar.setTitle(getResources().getString(R.string.toolbar_complete_tasks));
+            fragment = new TaskElementsList();
+            arguments.putString(TaskElementsList.STATUS_SELECTIONS, "status = ?");
+            arguments.putString(TaskElementsList.STATUS_STATE, "2");
+            fragment.setArguments(arguments);
+        }
+        if (id == R.id.nav_parent_labels){
+            toolbar.setTitle(getResources().getString(R.string.toolbar_labels));
+            fragment = new LabelElementsList();
+        }
+        if (id == R.id.create_task_toolbar_btn){
+            toolbar.setTitle(getResources().getString(R.string.toolbar_create_task));
+            fragment = new CreateTaskFragment();
+        }
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frame_content, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    //Выбор даты для создания новой задачи.
+    public void chooseLimitDate(View view){
+        DialogFragment dateFragment = new CreateTaskFragment.DatePickerFragment();
+        dateFragment.show(getSupportFragmentManager(), "dateFragment");
+    }
+
+    //Создание новой задачи\ Запись в БД
+    public void createTask (View view){
+        TextView taskNameView = (TextView)findViewById(R.id.name_text_task);
+        String taskName = taskNameView.getText().toString();
+
+        ReminderDBHelper reminderDBHelper = new ReminderDBHelper(this);
+
+        if (!reminderDBHelper.checkTaskName(taskName)){
+            String descName = ((TextView)findViewById(R.id.desc_text_task)).getText().toString();
+            long dateLimitTask = CreateTaskFragment.limitDateValue.getTimeInMillis();;
+            int importTask;
+            String parentLabelTask;
+
+            Spinner importTaskView = (Spinner) findViewById(R.id.import_choose);
+            Spinner parentLabelTaskView = (Spinner) findViewById(R.id.parent_label_choose);
+
+            importTask = importTaskView.getSelectedItemPosition();
+            parentLabelTask = ((TextView)parentLabelTaskView.getSelectedView()).getText().toString();
+
+            reminderDBHelper.addTask(taskName, descName, importTask, dateLimitTask, parentLabelTask);
+            createNewFragment(R.id.nav_all_tasks);
+        }
+        else{
+            taskNameView.setBackgroundResource(R.color.error);
+            Snackbar.make(view, "Sorry, but this task already exist. Please change name.", Snackbar.LENGTH_LONG).show();
+        }
+        reminderDBHelper.closeConnection();
     }
 }

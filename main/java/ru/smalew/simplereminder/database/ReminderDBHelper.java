@@ -20,18 +20,19 @@ import java.util.Objects;
  */
 public class ReminderDBHelper extends SQLiteOpenHelper {
 
-    public static final String LABEL_NAME_IDENT = "lableName";
-    public static final String LABEL_DESC_IDENT = "lableDesc";
-    public static final String LABEL_COUNT_USUAL_IDENT = "lableUsualCount";
-    public static final String LABEL_COUNT_IMPORT_IDENT = "lableImportantCount";
-    public static final String LABEL_COUNT_COMLETE_IDENT = "lableCompleteCount";
+    public static final String LABEL_NAME_IDENT = "lable_name";
+    public static final String LABEL_DESC_IDENT = "lable_desc";
+    public static final String LABEL_COUNT_USUAL_IDENT = "lable_usual_count";
+    public static final String LABEL_COUNT_IMPORT_IDENT = "lable_important_count";
+    public static final String LABEL_COUNT_COMLETE_IDENT = "lable_complete_count";
 
-    public static final String TASK_NAME_IDENT = "taskName";
-    public static final String TASK_DESC_IDENT = "taskDesc";
+    public static final String TASK_NAME_IDENT = "task_name";
+    public static final String TASK_DESC_IDENT = "task_desc";
     public static final String TASK_STATUS_IDENT = "status";
-    public static final String TASK_STARTDATE_IDENT = "startDate";
-    public static final String TASK_COMPLETEDATE_IDENT = "comleteDate";
-    public static final String TASK_PARENT_LABEL_IDENT = "parentLabel";
+    public static final String TASK_START_DATE_IDENT = "start_date";
+    public static final String TASK_LIMIT_DATE_IDENT = "limit_date";
+    public static final String TASK_COMPLETE_DATE_IDENT = "comlete_date";
+    public static final String TASK_PARENT_LABEL_IDENT = "parent_label";
 
     public static final String DB_NAME = "reminder";
     public static final int DB_VERSION = 1;
@@ -47,43 +48,21 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE labels (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "label_name TEXT, " +
-                "label_desc TEXT, " +
-                "usual_count INTEGER, " +
-                "import_count INTEGER, " +
-                "complete_count INTEGER);");
+                LABEL_NAME_IDENT +" TEXT, " +
+                LABEL_DESC_IDENT +" TEXT, " +
+                LABEL_COUNT_USUAL_IDENT +" INTEGER, " +
+                LABEL_COUNT_IMPORT_IDENT +" INTEGER, " +
+                LABEL_COUNT_COMLETE_IDENT +" INTEGER);");
 
         db.execSQL("CREATE TABLE tasks (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                "task_name TEXT, "+
-                "task_desc TEXT, "+
-                "status TEXT, "+
-                "start_date INTEGER, "+
-                "complete_date INTEGER, "+
-                "label TEXT);");
+                TASK_NAME_IDENT +" TEXT, "+
+                TASK_DESC_IDENT +" TEXT, "+
+                TASK_STATUS_IDENT +" TEXT, "+
+                TASK_START_DATE_IDENT +" TEXT, "+
+                TASK_LIMIT_DATE_IDENT +" TEXT, "+
+                TASK_COMPLETE_DATE_IDENT +" TEXT, "+
+                TASK_PARENT_LABEL_IDENT +" TEXT);");
 
-        //Заполняем таблицу первоначальными данными тестовыми данными.
-        ContentValues values = new ContentValues();
-        values.put("label_name", "Main");
-        values.put("label_desc", "Main Label");
-        values.put("usual_count", 5);
-        values.put("import_count", 1);
-        values.put("complete_count", 3);
-        db.insert("labels", null, values);
-
-        values = new ContentValues();
-        values.put("label_name", "Main Test");
-        values.put("label_desc", "Main Test Label");
-        values.put("usual_count", 1);
-        values.put("import_count", 2);
-        values.put("complete_count", 3);
-        db.insert("labels", null, values);
-
-        long time = Calendar.getInstance().getTimeInMillis();
-
-//        testInitData(db, "Вынести мусор", "За угол дома", 2, time, "");
-//        testInitData(db, "Купить хлеб", "Белый, черный", 1, time, "Магазин");
-//        testInitData(db, "Купить селедку", "13,50 за кг", 0, time, "Магази");
-//        testInitData(db, "Справить ДР", "дома", 1, time, "Праздник");
 
     }
     @Override
@@ -91,23 +70,14 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
         //Пока нечего обновлять
     }
 
-    public void testInitData(SQLiteDatabase db, String taskName, String taskDesc, int imp, long date, String label){
-        ContentValues values = new ContentValues();
-        values.put("task_name", taskName);
-        values.put("task_desc", taskDesc);
-        values.put("status", imp);
-        values.put("start_date", date);
-        values.put("complete_date", 0);
-        values.put("label", label);
-        db.insert("tasks", null, values);
-    }
-
     //Работа с таблицей LABELS
     public void addLabel(String labelName, String labelDesc){
         ContentValues values = new ContentValues();
-        values.put("label_name", labelName);
-        values.put("label_desc", labelDesc);
-        values.put("count", 0);
+        values.put(LABEL_NAME_IDENT, labelName);
+        values.put(LABEL_DESC_IDENT, labelDesc);
+        values.put(LABEL_COUNT_USUAL_IDENT, 0);
+        values.put(LABEL_COUNT_IMPORT_IDENT, 0);
+        values.put(LABEL_COUNT_COMLETE_IDENT, 0);
 
         database.insert("labels", null, values);
     }
@@ -116,10 +86,10 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
     }
     public void changeLabel (String labelName, String labelDesc, String oldLabelName){
         ContentValues values = new ContentValues();
-        values.put("label_name", labelName);
+        values.put(LABEL_NAME_IDENT, labelName);
 
         if (labelDesc != null)
-            values.put("label_desc", labelDesc);
+            values.put(LABEL_DESC_IDENT, labelDesc);
 
         database.update("labels", values,"label_name = ?", new String[]{oldLabelName});
     }
@@ -144,15 +114,16 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
 
         database.update("labels", values,"label_name = ?", new String[]{labelName});
     }
-    public boolean checkLabelName(SQLiteDatabase db, String labelName){
-        cursor = db.query("labels", new String[]{"label_name"}, "label_name = ?", new String[]{labelName}, null,null,null);
+    public boolean checkLabelName(String labelName){
+        cursor = database.query("labels", new String[]{LABEL_NAME_IDENT}, LABEL_NAME_IDENT +" = ?", new String[]{labelName}, null,null,null);
         return cursor.moveToFirst();
     }
     public List<Map<String,Object>> getLabelElements(){
         List<Map<String,Object>> result = new ArrayList<>();
         Map<String, Object> items;
 
-        cursor = database.query("labels", new String[]{"label_name", "label_desc", "usual_count", "import_count", "complete_count"},null,null,null,null,null);
+        cursor = database.query("labels", new String[]{LABEL_NAME_IDENT, LABEL_DESC_IDENT,
+                LABEL_COUNT_USUAL_IDENT, LABEL_COUNT_IMPORT_IDENT, LABEL_COUNT_COMLETE_IDENT},null,null,null,null,null);
 
         if (cursor.moveToFirst()){
             items = new HashMap<>();
@@ -173,19 +144,19 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
                 result.add(items);
             }
         }
-
         return result;
     }
 
     //Работа с таблицей TASKS
-    public void addTask(String task, String desc, int status, int startDate, String parentLabel){
+    public void addTask(String task, String desc, int status, long limitDate, String parentLabel){
         ContentValues values = new ContentValues();
-        values.put("task_name", task);
-        values.put("tasc_desc", desc);
-        values.put("status", status);
-        values.put("start_date", startDate);
-        values.put("complete_date", 0);
-        values.put("label", parentLabel);
+        values.put(TASK_NAME_IDENT, task);
+        values.put(TASK_DESC_IDENT, desc);
+        values.put(TASK_STATUS_IDENT, status);
+        values.put(TASK_START_DATE_IDENT, Calendar.getInstance().getTimeInMillis());
+        values.put(TASK_LIMIT_DATE_IDENT, limitDate);
+        values.put(TASK_COMPLETE_DATE_IDENT, 0);
+        values.put(TASK_PARENT_LABEL_IDENT, parentLabel);
         database.insert("tasks", null, values);
     }
     public void deleteTask (String taskName){
@@ -193,13 +164,17 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
     }
     public void changeTask (String taskName, String desc, int status, String parentLabel){
         ContentValues values = new ContentValues();
-        values.put("task_name", taskName);
+        values.put(TASK_NAME_IDENT, taskName);
         if (desc != null)
-            values.put("tasc_desc", desc);
-        values.put("status", status);
-        values.put("label", parentLabel);
+            values.put(TASK_DESC_IDENT, desc);
+        values.put(TASK_STATUS_IDENT, status);
+        values.put(TASK_PARENT_LABEL_IDENT, parentLabel);
 
         database.update("tasks", values,"task_name = ?", new String[]{taskName});
+    }
+    public boolean checkTaskName(String taskName){
+        cursor = database.query("tasks", new String[]{TASK_NAME_IDENT}, TASK_NAME_IDENT +" = ?", new String[]{taskName}, null, null, null);
+        return cursor.moveToFirst();
     }
     public List<Map<String, Object>> getTasksElements(String selections, String[] args){
         
@@ -207,7 +182,8 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
         Map<String, Object> items;
 
         cursor = database.query("tasks",
-                new String[]{"task_name", "task_desc", "status", "start_date", "complete_date", "label"},
+                new String[]{TASK_NAME_IDENT, TASK_DESC_IDENT, TASK_STATUS_IDENT, TASK_START_DATE_IDENT,
+                        TASK_LIMIT_DATE_IDENT, TASK_COMPLETE_DATE_IDENT, TASK_PARENT_LABEL_IDENT},
                 selections, args, null, null, null);
 
         if (cursor.moveToFirst()){
@@ -215,9 +191,10 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
             items.put(TASK_NAME_IDENT, cursor.getString(0));
             items.put(TASK_DESC_IDENT, cursor.getString(1));
             items.put(TASK_STATUS_IDENT, cursor.getString(2));
-            items.put(TASK_STARTDATE_IDENT, cursor.getString(3));
-            items.put(TASK_COMPLETEDATE_IDENT, cursor.getString(4));
-            items.put(TASK_PARENT_LABEL_IDENT, cursor.getString(5));
+            items.put(TASK_START_DATE_IDENT, cursor.getString(3));
+            items.put(TASK_LIMIT_DATE_IDENT, cursor.getString(4));
+            items.put(TASK_COMPLETE_DATE_IDENT, cursor.getString(5));
+            items.put(TASK_PARENT_LABEL_IDENT, cursor.getString(6));
             result.add(items);
 
             while (cursor.moveToNext()){
@@ -225,13 +202,13 @@ public class ReminderDBHelper extends SQLiteOpenHelper {
                 items.put(TASK_NAME_IDENT, cursor.getString(0));
                 items.put(TASK_DESC_IDENT, cursor.getString(1));
                 items.put(TASK_STATUS_IDENT, cursor.getString(2));
-                items.put(TASK_STARTDATE_IDENT, cursor.getString(3));
-                items.put(TASK_COMPLETEDATE_IDENT, cursor.getString(4));
-                items.put(TASK_PARENT_LABEL_IDENT, cursor.getString(5));
+                items.put(TASK_START_DATE_IDENT, cursor.getString(3));
+                items.put(TASK_LIMIT_DATE_IDENT, cursor.getString(4));
+                items.put(TASK_COMPLETE_DATE_IDENT, cursor.getString(5));
+                items.put(TASK_PARENT_LABEL_IDENT, cursor.getString(6));
                 result.add(items);
             }
         }
-
         return result;
     }
 
