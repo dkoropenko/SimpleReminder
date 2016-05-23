@@ -8,25 +8,31 @@
     <string name="toolbar_action_settings">Settings</string>
     <string name="toolbar_create_task">Create task</string>
     <string name="toolbar_labels">Labels</string>
+    <string name="toolbar_create_label">Create label</string>
     <string name="toolbar_complete_tasks">Complete tasks</string>
     <string name="toolbar_important_tasks">Importance tasks</string>
     <string name="toolbar_all_tasks">All tasks</string>
 
     <!--Left Menu-->
     <string name="nav_title">Preference</string>
+    <string name="nav_tasks">Tasks</string>
+    <string name="nav_label">Labels</string>
+
     <string name="nav_all_tasks">All tasks</string>
     <string name="nav_important">Important tasks</string>
     <string name="nav_complete_task">Completed tasks</string>
-    <string name="nav_task_parent_labels">Labels</string>
+
+    <string name="nav_task_parent_labels">All labels</string>
+    <string name="nav_calendare">Calendare</string>
 
     <string name="nav_options">Options</string>
     <string name="nav_help">Help</string>
 
-    <!--TestTaskFragment-->
-    <string name="information">Please create new task. Important!\n
+    <!--CreateTaskFragment-->
+    <string name="task_create_information">Please create new task. Important!\n
                                 Task name must be unique.</string>
     <string name="task_name_info">Name</string>
-    <string name="desc_name_info">Description</string>
+    <string name="task_desc_info">Description</string>
     <string name="task_import">Importance</string>
     <string name="task_date">Date of completion</string>
     <string name="task_date_chooser">dd:mm:yyyy</string>
@@ -36,8 +42,20 @@
         <item>usual</item>
         <item>importance</item>
     </string-array>
-
     <string name="task_choose_label">empty</string>
-    <string name="task_create_button_text">Create</string>
+
+    <!--CreateLabelFragment-->
+    <string name="label_create_information">Please create new label. Important!\n
+                                Task name must be unique.</string>
+    <string name="label_name_info">Name</string>
+    <string name="label_desc_info">Description</string>
+
+    <string name="create_button_text">Create</string>
+
+    <string name="task_error">Sorry, but this task already exist. Please change name.</string>
+    <string name="label_error">Sorry, but this label already exist. Please change name.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -49,11 +49,11 @@ public class LabelElementsListAdapter extends RecyclerView.Adapter<LabelElements
 
     @Override
     public void onBindViewHolder(LabelElementsHolder holder, int position) {
-        Map<String, Object> result = elements.get(position);
-        holder.labelName.setText(result.get(ReminderDBHelper.LABEL_NAME_IDENT).toString());
-        holder.usualCount.setText(result.get(ReminderDBHelper.LABEL_COUNT_USUAL_IDENT).toString());
-        holder.importantCount.setText(result.get(ReminderDBHelper.LABEL_COUNT_IMPORT_IDENT).toString());
-        holder.completeCount.setText(result.get(ReminderDBHelper.LABEL_COUNT_COMLETE_IDENT).toString());
+//        Map<String, Object> result = elements.get(position);
+//        holder.labelName.setText(result.get(ReminderDBHelper.LABEL_NAME_IDENT).toString());
+//        holder.usualCount.setText(result.get(ReminderDBHelper.LABEL_COUNT_USUAL_IDENT).toString());
+//        holder.importantCount.setText(result.get(ReminderDBHelper.LABEL_COUNT_IMPORT_IDENT).toString());
+//        holder.completeCount.setText(result.get(ReminderDBHelper.LABEL_COUNT_COMLETE_IDENT).toString());
     }
 
     @Override

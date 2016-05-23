@@ -7,13 +7,15 @@
     <dimen name="activity_vertical_margin">10dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <!--TaskCreateFragment-->
+    <!--margins-->
     <dimen name="left_margin">20dp</dimen>
     <dimen name="right_margin">20dp</dimen>
     <dimen name="left_input_margin">15dp</dimen>
     <dimen name="top_margin">25dp</dimen>
 
-    <dimen name="main_info_text_size">20dp</dimen>
-    <dimen name="task_info_text_size">18dp</dimen>
+    <!--text-->
+    <dimen name="info_text_size">20dp</dimen>
+    <dimen name="main_text_size">18dp</dimen>
+    <dimen name="help_text_size">18dp</dimen>
 
 </resources>

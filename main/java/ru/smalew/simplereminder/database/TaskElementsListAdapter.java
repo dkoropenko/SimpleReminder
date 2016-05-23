@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +26,12 @@ import ru.smalew.simplereminder.R;
  */
 public class TaskElementsListAdapter extends RecyclerView.Adapter<TaskElementsListAdapter.TaskElementsHolder> {
 
-    private List<Map<String, Object>> elements;
+    private List<Map<String, Object>> taskElements, labelElements;
 
     public TaskElementsListAdapter(Context context, String selections, String[] args){
         ReminderDBHelper reminderDBHelper = new ReminderDBHelper(context);
-        elements = reminderDBHelper.getTasksElements(selections, args);
+        taskElements = reminderDBHelper.getTasksElements(selections, args);
+        labelElements = reminderDBHelper.getLabelElements();
         reminderDBHelper.closeConnection();
     }
 
@@ -61,15 +63,15 @@ public class TaskElementsListAdapter extends RecyclerView.Adapter<TaskElementsLi
     @Override
     public void onBindViewHolder(TaskElementsHolder holder, int position) {
         //Элемент из списка, содержащий нужную информацию
-        Map<String, Object> result = elements.get(position);
+        Map<String, Object> result = taskElements.get(position);
 
         //Указываем навание задачи
-        holder.taskName.setText(result.get(ReminderDBHelper.TASK_NAME_IDENT).toString());
+        holder.taskName.setText(result.get(ReminderDBHelper.NAME).toString());
 
         //Забираем дату выполнения задачи из БД.
         //********************************************************************************************
         Calendar calendar = Calendar.getInstance();
-        long startDate = Long.parseLong(result.get(ReminderDBHelper.TASK_LIMIT_DATE_IDENT).toString());
+        long startDate = (long) result.get(ReminderDBHelper.TASK_FINISH_DATE);
         calendar.setTimeInMillis(startDate);
 
         StringBuilder resultDate = new StringBuilder();
@@ -92,12 +94,29 @@ public class TaskElementsListAdapter extends RecyclerView.Adapter<TaskElementsLi
         resultDate.append(calendar.get(Calendar.YEAR));
         //********************************************************************************************
 
-        //Указываем дату и ярлык задачи.
+        //Указываем дату
         holder.taskStartDate.setText(resultDate.toString());
-        holder.taskParentLabel.setText(result.get(ReminderDBHelper.TASK_PARENT_LABEL_IDENT).toString());
+
+        //Забираем данные ярлыка
+        int parentLabelHash = (int)result.get(ReminderDBHelper.TASK_PARENT_LABEL_HASH);
+        String labelName = null;
+
+        if (parentLabelHash == 0)
+            labelName = "";
+        else{
+            Map<String, Object> labelElement;
+            for (int i = 0; i < labelElements.size(); i++) {
+                labelElement = labelElements.get(i);
+                if (labelElement.containsValue(parentLabelHash)){
+                    labelName = labelElement.get(ReminderDBHelper.NAME).toString();
+                    return;
+                }
+            }
+        }
+        holder.taskParentLabel.setText(labelName);
 
         //Указываем статус задачи (Важная, обычная, выполненная)
-        int status = Integer.parseInt(result.get(ReminderDBHelper.TASK_STATUS_IDENT).toString());
+        int status = Integer.parseInt(result.get(ReminderDBHelper.TASK_STATUS).toString());
         switch (status){
             case 0:
                 holder.statusInfo.setBackgroundResource(R.color.status_usual);
@@ -113,7 +132,7 @@ public class TaskElementsListAdapter extends RecyclerView.Adapter<TaskElementsLi
 
     @Override
     public int getItemCount() {
-        return elements.size();
+        return taskElements.size();
     }
 
     @Override

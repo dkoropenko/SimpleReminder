@@ -1,6 +1,7 @@
 package ru.smalew.simplereminder;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -8,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.Spinner;
@@ -27,12 +30,9 @@ import ru.smalew.simplereminder.database.ReminderDBHelper;
  */
 public class CreateTaskFragment extends Fragment {
 
-    public static Calendar limitDateValue;
-
-    public CreateTaskFragment() {
-        limitDateValue = Calendar.getInstance();
-    }
-
+    public static Calendar finishDate;
+    
+    public CreateTaskFragment() {finishDate = Calendar.getInstance(); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +65,7 @@ public class CreateTaskFragment extends Fragment {
         label_items[0] = getResources().getString(R.string.task_choose_label);
 
         for (int i = 1; i <= elements.size(); i++) {
-            label_items[i] = elements.get(i-1).get(ReminderDBHelper.LABEL_NAME_IDENT).toString();
+            label_items[i] = elements.get(i-1).get(ReminderDBHelper.NAME).toString();
         }
 
         ArrayAdapter<String> labelChooserAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, label_items);
@@ -75,7 +75,7 @@ public class CreateTaskFragment extends Fragment {
     }
 
     private void createDateLimit(){
-        limitDateValue.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
+        finishDate.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
         TextView choosenDate = (TextView) getActivity().findViewById(R.id.task_date_chooser);
         choosenDate.setText(dateFormating());
     }
@@ -95,7 +95,7 @@ public class CreateTaskFragment extends Fragment {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            limitDateValue.set(year, monthOfYear, dayOfMonth);
+            finishDate.set(year, monthOfYear, dayOfMonth);
             TextView choosenDate = (TextView) getActivity().findViewById(R.id.task_date_chooser);
             choosenDate.setText(dateFormating());
         }
@@ -105,21 +105,21 @@ public class CreateTaskFragment extends Fragment {
         StringBuilder resultDate = new StringBuilder();
 
         //Добавляем 0 перед датой, если она "одинарная"
-        if (limitDateValue.get(Calendar.DAY_OF_MONTH) < 10){
+        if (finishDate.get(Calendar.DAY_OF_MONTH) < 10){
             resultDate.append("0");
-            resultDate.append(limitDateValue.get(Calendar.DAY_OF_MONTH));
+            resultDate.append(finishDate.get(Calendar.DAY_OF_MONTH));
         }
         else
-            resultDate.append(limitDateValue.get(Calendar.DAY_OF_MONTH));
+            resultDate.append(finishDate.get(Calendar.DAY_OF_MONTH));
         resultDate.append(".");
-        if (limitDateValue.get(Calendar.MONTH) < 9){
+        if (finishDate.get(Calendar.MONTH) < 9){
             resultDate.append("0");
-            resultDate.append(limitDateValue.get(Calendar.MONTH)+1);
+            resultDate.append(finishDate.get(Calendar.MONTH)+1);
         }
         else
-            resultDate.append(limitDateValue.get(Calendar.MONTH)+1);
+            resultDate.append(finishDate.get(Calendar.MONTH)+1);
         resultDate.append(".");
-        resultDate.append(limitDateValue.get(Calendar.YEAR));
+        resultDate.append(finishDate.get(Calendar.YEAR));
 
         return resultDate.toString();
     }
